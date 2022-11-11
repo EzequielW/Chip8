@@ -34,6 +34,8 @@ pub(crate) fn init() -> Result<(), Error>{
     let mut keyboard = Keyboard::new();
     let mut speaker = Speaker::new();
 
+    speaker.play(None);
+
     eventLoop.run(move |event, _, controlFlow| {
         if input.update(&event) {
             if input.key_pressed(VirtualKeyCode::Escape) || input.quit() {

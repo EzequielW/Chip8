@@ -48,8 +48,8 @@ impl Keyboard {
         ]);
 
         Keyboard { 
-            keymap: keymap, 
-            keypressed: keypressed
+            keymap, 
+            keypressed
         }
     }
 

@@ -1,24 +1,27 @@
 use rodio::{Sink, OutputStream, OutputStreamHandle};
 
 pub(crate) struct Speaker{
+    stream: OutputStream,
     streamHandle: OutputStreamHandle,
     sink: Option<Sink>
 }
 
 impl Speaker{
     pub fn new() -> Speaker{
-        let (_stream, streamHandle) = OutputStream::try_default().unwrap();
+        let (stream, streamHandle) = OutputStream::try_default().unwrap();
         Speaker {
+            stream,
             streamHandle,
             sink: None
         }
     }
 
-    pub fn play(&self, frequency: Option<f32>){
+    pub fn play(&mut self, frequency: Option<f32>){
         let freq = frequency.unwrap_or(440.0);
         let source = rodio::source::SineWave::new(freq);
         let sink = Sink::try_new(&self.streamHandle).unwrap();
         sink.append(source);
+        self.sink = Some(sink);
     }
 
     pub fn stop(&mut self){
