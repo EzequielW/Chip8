@@ -7,6 +7,7 @@ use pixels::Error;
 mod core {
     pub mod chip8;
     pub mod renderer;
+    pub mod keyboard;
 }
 
 fn main() -> Result<(), Error> {

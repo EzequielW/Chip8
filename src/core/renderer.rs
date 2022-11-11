@@ -1,30 +1,18 @@
 use log::error;
 use pixels::{SurfaceTexture, Pixels, Error};
-use winit::{window::{WindowBuilder, Window}, event_loop::EventLoop, dpi::LogicalSize};
+use winit::{window::{Window}};
 
 pub(crate) struct Renderer{
     widthRes: usize,
     heightRes: usize,
     display: Vec<usize>,
-    window: Window,
     pixels: Pixels
 }
 
 impl Renderer {
-    pub fn new(scale: usize, eventLoop: &EventLoop<()>) -> Result<Renderer, Error> {
+    pub fn new(window: &Window) -> Result<Renderer, Error> {
         let defaultWidth: usize = 64;
         let defaultHeight: usize = 32;
-
-        let window = {
-            let size = LogicalSize::new(defaultWidth as f64, defaultHeight as f64);
-            let scaled_size = LogicalSize::new(defaultWidth as f64 * scale as f64, defaultHeight as f64 * scale as f64);
-            WindowBuilder::new()
-                .with_title("Chip 8 Emulator")
-                .with_inner_size(scaled_size)
-                .with_min_inner_size(size)
-                .build(&eventLoop)
-                .unwrap()
-        };
 
         let pixels = {
             let window_size = window.inner_size();
@@ -36,7 +24,6 @@ impl Renderer {
             widthRes: defaultWidth,
             heightRes: defaultHeight,
             display: vec![0; defaultWidth * defaultHeight],
-            window,
             pixels
         })
     }
