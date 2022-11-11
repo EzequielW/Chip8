@@ -1,11 +1,12 @@
 use log::error;
 use pixels::{SurfaceTexture, Pixels, Error};
-use winit::{window::{WindowBuilder}, event_loop::EventLoop, dpi::LogicalSize};
+use winit::{window::{WindowBuilder, Window}, event_loop::EventLoop, dpi::LogicalSize};
 
 pub(crate) struct Renderer{
     widthRes: usize,
     heightRes: usize,
     display: Vec<usize>,
+    window: Window,
     pixels: Pixels
 }
 
@@ -35,6 +36,7 @@ impl Renderer {
             widthRes: defaultWidth,
             heightRes: defaultHeight,
             display: vec![0; defaultWidth * defaultHeight],
+            window,
             pixels
         })
     }
