@@ -1,3 +1,4 @@
+use chrono::Utc;
 use pixels::Error;
 use winit::{
     event_loop::{ControlFlow, EventLoop}, event::VirtualKeyCode,
@@ -13,6 +14,8 @@ pub(crate) fn init() -> Result<(), Error>{
     let mut winRenderer = Renderer::new(10, &eventLoop)?;
     let x: usize = 0;
     let mut y: usize = 0;
+    let fpsInterval = 1000 / 60;
+    let mut previousTime = Utc::now().time();
 
     eventLoop.run(move |event, _, controlFlow| {
         if input.update(&event) {
@@ -21,11 +24,17 @@ pub(crate) fn init() -> Result<(), Error>{
                 return;
             }
 
-            if input.key_held(VirtualKeyCode::P) {
+            if input.key_pressed(VirtualKeyCode::P) {
                 winRenderer.setPixel(x, y);
                 y += 1;
             }
+        }
 
+        let currentTime = Utc::now().time();
+        let elapsed = currentTime - previousTime;
+
+        if elapsed.num_milliseconds() > fpsInterval {
+            previousTime = currentTime;
             if winRenderer.render()
             {
                 *controlFlow = ControlFlow::Exit;
