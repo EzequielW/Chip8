@@ -5,7 +5,7 @@ use winit::{
 };
 use winit_input_helper::WinitInputHelper;
 
-use super::renderer::Renderer;
+use super::{renderer::Renderer, speaker::Speaker};
 use super::keyboard::Keyboard;
 
 pub(crate) fn init() -> Result<(), Error>{
@@ -26,10 +26,13 @@ pub(crate) fn init() -> Result<(), Error>{
             .build(&eventLoop)
             .unwrap()
     };
-    let mut winRenderer = Renderer::new(&window)?;
     let fpsInterval = 1000 / 60;
     let mut previousTime = Utc::now().time();
+
+    // Main components
+    let mut winRenderer = Renderer::new(&window)?;
     let mut keyboard = Keyboard::new();
+    let mut speaker = Speaker::new();
 
     eventLoop.run(move |event, _, controlFlow| {
         if input.update(&event) {

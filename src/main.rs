@@ -8,6 +8,8 @@ mod core {
     pub mod chip8;
     pub mod renderer;
     pub mod keyboard;
+    pub mod speaker;
+    pub mod cpu;
 }
 
 fn main() -> Result<(), Error> {
