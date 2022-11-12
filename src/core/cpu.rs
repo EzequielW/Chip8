@@ -77,7 +77,7 @@ impl CPU {
     }
 
     pub fn loadRom(&mut self, romName: &String){
-        let mut path: String = "./roms/".to_owned();
+        let mut path: String = "./src/roms/".to_owned();
         path.push_str(romName);
         let program = read(path).unwrap();
 
@@ -130,8 +130,8 @@ impl CPU {
     pub fn executeInstruction(&mut self, opcode: u16, renderer: &mut Renderer, keyboard: &mut Keyboard) {
         self.pc += 2;
 
-        let x: u8 = ((opcode & 0x0F00) as u8) >> 8;
-        let y: u8 = ((opcode & 0x00F0) as u8) >> 4;
+        let x: u8 = ((opcode & 0x0F00) >> 8) as u8;
+        let y: u8 = ((opcode & 0x00F0) >> 4) as u8;
 
         match opcode & 0xF000 {
             0x0000 => {

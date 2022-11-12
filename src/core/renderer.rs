@@ -45,7 +45,7 @@ impl Renderer {
     }
 
     pub fn clear(&mut self) {
-        self.display = vec![0, self.widthRes * self.heightRes];
+        self.display = vec![0; self.widthRes * self.heightRes];
     }
 
     pub fn render(&mut self) -> bool {
