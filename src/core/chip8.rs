@@ -34,7 +34,7 @@ pub(crate) fn init() -> Result<(), Error>{
     let mut keyboard = Keyboard::new();
     let mut speaker = Speaker::new();
     let mut cpu = CPU::new();
-    let romName = String::from("BLINKY");
+    let romName = String::from("BLITZ");
     cpu.loadSpritesIntoMemory();
     cpu.loadRom(&romName);
 

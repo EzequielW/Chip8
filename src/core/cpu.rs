@@ -223,7 +223,7 @@ impl CPU {
                 let width = 8;
                 let height = opcode & 0xF;
 
-                self.v[x as usize] = 0;
+                self.v[0xF] = 0;
 
                 for row in 0..height {
                     let mut sprite = self.memory[(self.i + row) as usize];
