@@ -44,9 +44,9 @@ impl Renderer {
         self.display[pixelLoc] == 0
     }
 
-    // pub fn clear(&mut self) {
-    //     self.display = vec![0, self.widthRes * self.heightRes];
-    // }
+    pub fn clear(&mut self) {
+        self.display = vec![0, self.widthRes * self.heightRes];
+    }
 
     pub fn render(&mut self) -> bool {
         let frame = self.pixels.get_frame_mut();

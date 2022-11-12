@@ -5,7 +5,7 @@ use winit::{
 };
 use winit_input_helper::WinitInputHelper;
 
-use super::{renderer::Renderer, speaker::Speaker};
+use super::{renderer::{Renderer}, speaker::Speaker, cpu::CPU};
 use super::keyboard::Keyboard;
 
 pub(crate) fn init() -> Result<(), Error>{
@@ -33,8 +33,10 @@ pub(crate) fn init() -> Result<(), Error>{
     let mut winRenderer = Renderer::new(&window)?;
     let mut keyboard = Keyboard::new();
     let mut speaker = Speaker::new();
-
-    speaker.play(None);
+    let mut cpu = CPU::new();
+    let romName = String::from("BLINKY");
+    cpu.loadSpritesIntoMemory();
+    cpu.loadRom(&romName);
 
     eventLoop.run(move |event, _, controlFlow| {
         if input.update(&event) {
@@ -43,7 +45,7 @@ pub(crate) fn init() -> Result<(), Error>{
                 return;
             }
 
-            keyboard.handleInput(&input);
+            keyboard.handleInput(&input, &mut cpu);
         }
 
         let currentTime = Utc::now().time();
@@ -51,11 +53,7 @@ pub(crate) fn init() -> Result<(), Error>{
 
         if elapsed.num_milliseconds() > fpsInterval {
             previousTime = currentTime;
-            if winRenderer.render()
-            {
-                *controlFlow = ControlFlow::Exit;
-                return;
-            }
+            cpu.cycle(&mut winRenderer, &mut speaker, &mut keyboard);
         }
     });
 }

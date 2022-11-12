@@ -3,14 +3,16 @@ use std::collections::HashMap;
 use winit::event::VirtualKeyCode;
 use winit_input_helper::WinitInputHelper;
 
+use super::cpu::CPU;
+
 pub(crate) struct Keyboard{
-    keymap: HashMap<VirtualKeyCode, u32>,
-    keypressed: HashMap<u32, bool>
+    keymap: HashMap<VirtualKeyCode, u8>,
+    keypressed: HashMap<u8, bool>
 }
 
 impl Keyboard {
     pub fn new() -> Keyboard {
-        let keymap = HashMap::from([
+        let keymap: HashMap<VirtualKeyCode, u8> = HashMap::from([
             (VirtualKeyCode::Key1, 0x1),
             (VirtualKeyCode::Key2, 0x2),
             (VirtualKeyCode::Key3, 0x3),
@@ -28,7 +30,7 @@ impl Keyboard {
             (VirtualKeyCode::C, 0xB),
             (VirtualKeyCode::V, 0xF)
         ]);
-        let keypressed = HashMap::from([
+        let keypressed: HashMap<u8, bool> = HashMap::from([
             (0x1, false),
             (0x2, false),
             (0x3, false),
@@ -53,22 +55,26 @@ impl Keyboard {
         }
     }
 
-    pub fn isKeyPressed(&self, keyCode: u32) -> bool {
+    pub fn isKeyPressed(&self, keyCode: u8) -> bool {
         self.keypressed[&keyCode]
     }
 
-    pub fn onKeyDown(&mut self, keyCode: u32) {
+    pub fn onKeyDown(&mut self, keyCode: u8, cpu: &mut CPU) {
         self.keypressed.insert(keyCode,  true);
+
+        if cpu.isPaused() {
+            cpu.unpause(keyCode);
+        }
     }
 
-    pub fn onKeyUp(&mut self, keyCode: u32) {
+    pub fn onKeyUp(&mut self, keyCode: u8) {
         self.keypressed.insert(keyCode, false);
     }
 
-    pub fn handleInput(&mut self, input: &WinitInputHelper) {
+    pub fn handleInput(&mut self, input: &WinitInputHelper, cpu: &mut CPU) {
         for (key, value) in self.keymap.clone() {
             if input.key_pressed(key) {
-                self.onKeyDown(value);
+                self.onKeyDown(value, cpu);
             }
             if input.key_released(key) {
                 self.onKeyUp(value);
