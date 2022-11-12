@@ -162,7 +162,7 @@ impl CPU {
                 }
             },
             0x6000 => self.v[x as usize] = (opcode & 0xFF) as u8,
-            0x7000 => self.v[x as usize] += (opcode & 0xFF) as u8,
+            0x7000 => self.v[x as usize] = self.v[x as usize].wrapping_add((opcode & 0xFF) as u8),
             0x8000 => {
                 match opcode & 0xF {
                     0x0 => self.v[x as usize] = self.v[y as usize],
@@ -185,7 +185,7 @@ impl CPU {
                             self.v[0xF] = 1;
                         }
 
-                        self.v[x as usize] -= self.v[y as usize];
+                        self.v[x as usize] = self.v[x as usize].wrapping_sub(self.v[y as usize]);
                     },
                     0x6 => {
                         self.v[0xF] = self.v[x as usize] & 0x1;
